@@ -255,7 +255,14 @@
             "Contigo cada momento es poesía, cada silencio es música y cada abrazo es mi hogar perfecto.",
             "Quédate conmigo siempre, porque contigo la vida es mucho más bonita. Eres el amor de mis días y mis noches.",
             "Me enamoré de ti sabiendo que nuestro amor iba a ser una aventura. Gracias por ser la luz que ilumina mi camino.",
-            "Elegirte a ti fue la mejor decisión que he tomado. Eres y siempre serás mi persona favorita."
+            "Elegirte a ti fue la mejor decisión que he tomado. Eres y siempre serás mi persona favorita.",
+            "Eres el sueño que nunca supe que tenía, y ahora no me imagino despertar sin ti a mi lado.",
+            "Te quiero no por quién eres, sino por quién soy cuando estoy contigo.",
+            "Si el universo es infinito, mi amor por ti es el universo entero concentrado en un latido.",
+            "La vida tiene muchos colores, pero desde que te conocí, todos se ven más brillantes y hermosos.",
+            "No importa cuántos obstáculos haya, siempre encontraré el camino de vuelta a tus brazos.",
+            "Tú eres la razón por la que mi corazón sonríe, incluso en los días más grises.",
+            "Cada mensaje tuyo es como una caricia al alma. Te amo profundamente."
         ];
         
         const poemText = document.getElementById('poem-text');
@@ -319,8 +326,18 @@
             currentImg.classList.add('next-image');
         }
 
-        // Cambiar una imagen del collage aleatoriamente cada 2.5 segundos
-        setInterval(changeRandomImage, 2500);
+        // Ejecutar el cambio de imagen con un intervalo aleatorio (entre 2 y 9 segundos máximo)
+        function scheduleNextImageChange() {
+            // Tiempo aleatorio entre 2000 ms (2s) y 9000 ms (9s)
+            const randomDelay = Math.floor(Math.random() * (9000 - 2000 + 1)) + 2000;
+            setTimeout(() => {
+                changeRandomImage();
+                scheduleNextImageChange();
+            }, randomDelay);
+        }
+        
+        // Iniciar el ciclo de cambios aleatorios de imágenes
+        scheduleNextImageChange();
 
         // Lógica del Reproductor de Música
         const playlist = [
