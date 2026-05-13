@@ -125,13 +125,18 @@
             transform: scale(1);
         }
 
-        /* Reproductor de Música Flotante */
-        .music-player {
+        /* Controles de Música */
+        .music-controls {
             position: fixed;
             bottom: 40px;
             right: 40px;
-            width: 56px;
-            height: 56px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            z-index: 100;
+        }
+
+        .music-btn {
             background: rgba(255, 255, 255, 0.7);
             backdrop-filter: blur(12px);
             border-radius: 50%;
@@ -141,22 +146,32 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             cursor: pointer;
             transition: all 0.4s ease;
-            z-index: 100;
             border: 1px solid rgba(255, 255, 255, 0.8);
         }
 
-        .music-player:hover {
+        .music-player {
+            width: 56px;
+            height: 56px;
+        }
+
+        .music-next {
+            width: 44px;
+            height: 44px;
+        }
+
+        .music-btn:hover {
             transform: scale(1.1);
             background: #ffffff;
             box-shadow: 0 15px 35px rgba(0,0,0,0.15);
         }
 
-        .music-player svg {
-            width: 22px;
-            height: 22px;
+        .music-btn svg {
             fill: #b887a2;
             transition: fill 0.3s ease;
         }
+
+        .music-player svg { width: 22px; height: 22px; }
+        .music-next svg { width: 18px; height: 18px; }
 
         /* Animación de ondas musicales (cuando reproduce) */
         .music-player.playing {
@@ -174,7 +189,9 @@
             h1 { font-size: 2.8rem; }
             .card { padding: 30px 20px; border-radius: 24px; }
             .gallery-container { height: 320px; }
-            .music-player { bottom: 20px; right: 20px; width: 50px; height: 50px; }
+            .music-controls { bottom: 20px; right: 20px; }
+            .music-player { width: 50px; height: 50px; }
+            .music-next { width: 40px; height: 40px; }
         }
     </style>
 </head>
@@ -204,16 +221,23 @@
         </div>
     </div>
 
-    <!-- Botón Reproductor de Música -->
-    <div class="music-player" id="play-btn">
-        <!-- Ícono de Play (Por defecto) -->
-        <svg id="icon-play" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path d="M8 5v14l11-7z"/>
-        </svg>
-        <!-- Ícono de Pause (Oculto por defecto) -->
-        <svg id="icon-pause" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="display: none;">
-            <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
-        </svg>
+    <!-- Controles de Música -->
+    <div class="music-controls">
+        <div class="music-btn music-player" id="play-btn" title="Reproducir / Pausar">
+            <!-- Ícono de Play -->
+            <svg id="icon-play" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M8 5v14l11-7z"/>
+            </svg>
+            <!-- Ícono de Pause -->
+            <svg id="icon-pause" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="display: none;">
+                <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+            </svg>
+        </div>
+        <div class="music-btn music-next" id="next-btn" title="Siguiente Canción">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/>
+            </svg>
+        </div>
     </div>
 
     <!-- PEGA AQUÍ EL ENLACE DE TU CANCIÓN -->
@@ -298,9 +322,21 @@
         // Cambiar una imagen del collage aleatoriamente cada 2.5 segundos
         setInterval(changeRandomImage, 2500);
 
-        // Lógica del Reproductor de Música Discreto
+        // Lógica del Reproductor de Música
+        const playlist = [
+            "musica/Brillas.mp3",
+            "musica/Beso.mp3",
+            "musica/Chachachá.mp3",
+            "musica/Labios Rotos (En Vivo Desde México  2010).mp3",
+            "musica/MAGIC! - Rude (Official Video).mp3",
+            "musica/Mi Buen Amor.mp3",
+            "musica/San Lucas.mp3"
+        ];
+        let currentSongIndex = 0;
+
         const audio = document.getElementById('bg-audio');
         const playBtn = document.getElementById('play-btn');
+        const nextBtn = document.getElementById('next-btn');
         const iconPlay = document.getElementById('icon-play');
         const iconPause = document.getElementById('icon-pause');
         let isPlaying = false;
@@ -312,20 +348,39 @@
             playBtn.classList.add('playing');
         }
 
-        // Intentar reproducir automáticamente
-        window.addEventListener('load', () => {
+        function playCurrentSong() {
+            audio.src = playlist[currentSongIndex];
             audio.play().then(() => {
                 setPlayState();
             }).catch(error => {
-                console.log('El navegador bloqueó el Autoplay. Esperando interacción del usuario.');
-                // Iniciar audio al primer clic en cualquier parte de la pantalla si el autoplay fue bloqueado
-                document.body.addEventListener('click', function initAudio() {
-                    if (!isPlaying) {
-                        audio.play().then(() => setPlayState());
-                    }
-                    document.body.removeEventListener('click', initAudio);
-                }, { once: true });
+                console.log('Esperando interacción para reproducir...');
             });
+        }
+
+        // Siguiente canción automáticamente al terminar
+        audio.addEventListener('ended', () => {
+            currentSongIndex = (currentSongIndex + 1) % playlist.length;
+            playCurrentSong();
+        });
+
+        // Botón Siguiente
+        nextBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            currentSongIndex = (currentSongIndex + 1) % playlist.length;
+            playCurrentSong();
+        });
+
+        // Intentar reproducir automáticamente
+        window.addEventListener('load', () => {
+            playCurrentSong();
+            
+            // Iniciar audio al primer clic si el autoplay fue bloqueado
+            document.body.addEventListener('click', function initAudio() {
+                if (!isPlaying) {
+                    audio.play().then(() => setPlayState());
+                }
+                document.body.removeEventListener('click', initAudio);
+            }, { once: true });
         });
 
         playBtn.addEventListener('click', (e) => {
@@ -335,6 +390,7 @@
                 iconPause.style.display = 'none';
                 iconPlay.style.display = 'block';
                 playBtn.classList.remove('playing');
+                isPlaying = false;
             } else {
                 audio.play().then(() => {
                     setPlayState();
@@ -342,7 +398,6 @@
                     console.log('Error al reproducir audio.');
                 });
             }
-            isPlaying = !isPlaying;
         });
     </script>
 </body>
