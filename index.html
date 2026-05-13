@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para Ti, Mi Amor</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        /* Variables de Color */
+        :root {
+            /* Degradado de fondo suave */
+            --bg-gradient-start: #fdfafb; /* Rosa muy pastel casi blanco */
+            --bg-gradient-end: #f4ebf4;   /* Lavanda suave pastel */
+            
+            /* Textos y Acentos */
+            --text-dark: #5e4c5a;   /* Morado grisáceo oscuro */
+            --text-light: #8a7385;
+            --accent-color: #d8a7b1; /* Rosa viejo elegante */
+            
+            /* Efectos Glassmorphism */
+            --card-bg: rgba(255, 255, 255, 0.5);
+            --shadow-soft: 0 20px 50px rgba(94, 76, 90, 0.08);
+            --shadow-hover: 0 25px 60px rgba(94, 76, 90, 0.12);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-dark);
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        /* Contenedor Principal (Tarjeta Glassmorphism) */
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            border-radius: 32px;
+            padding: 40px 30px;
+            width: 100%;
+            max-width: 550px;
+            box-shadow: var(--shadow-soft);
+            text-align: center;
+            transition: all 0.5s ease;
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-hover);
+            transform: translateY(-5px);
+        }
+
+        /* Tipografía */
+        h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+            background: linear-gradient(to right, #b887a2, #a1789c);
+            -webkit-background-clip: text;
+            color: transparent;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.02);
+        }
+
+        p.message {
+            font-size: 1.05rem;
+            line-height: 1.6;
+            color: var(--text-dark);
+            margin-bottom: 35px;
+            font-weight: 300;
+            transition: opacity 1s ease-in-out;
+            min-height: 70px; /* Para evitar que la tarjeta cambie de tamaño bruscamente */
+        }
+
+        p.message.fade-out {
+            opacity: 0;
+        }
+
+        /* Galería Animada Collage */
+        .gallery-container {
+            width: 100%;
+            height: 380px;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-rows: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .collage-item {
+            position: relative;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.06);
+            background: #fff;
+        }
+
+        .collage-item img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            transition: opacity 1.5s ease-in-out, transform 8s ease;
+            transform: scale(1.05);
+        }
+
+        .collage-item img.active {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* Reproductor de Música Flotante */
+        .music-player {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            width: 56px;
+            height: 56px;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: all 0.4s ease;
+            z-index: 100;
+            border: 1px solid rgba(255, 255, 255, 0.8);
+        }
+
+        .music-player:hover {
+            transform: scale(1.1);
+            background: #ffffff;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        }
+
+        .music-player svg {
+            width: 22px;
+            height: 22px;
+            fill: #b887a2;
+            transition: fill 0.3s ease;
+        }
+
+        /* Animación de ondas musicales (cuando reproduce) */
+        .music-player.playing {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(184, 135, 162, 0.4); }
+            70% { box-shadow: 0 0 0 15px rgba(184, 135, 162, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(184, 135, 162, 0); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 600px) {
+            h1 { font-size: 2.8rem; }
+            .card { padding: 30px 20px; border-radius: 24px; }
+            .gallery-container { height: 320px; }
+            .music-player { bottom: 20px; right: 20px; width: 50px; height: 50px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h1>Para Ti, Mi Amor</h1>
+        <p class="message" id="poem-text">Eres mi lugar favorito, mi mayor alegría y la historia más hermosa que jamás imaginé escribir. Cada día contigo es un regalo.</p>
+        
+        <div class="gallery-container">
+            <div class="collage-item">
+                <img src="imagenes/20250605_102630.jpg" alt="Foto 1" class="active">
+                <img src="" alt="Foto 1 Siguiente" class="next-image">
+            </div>
+            <div class="collage-item">
+                <img src="imagenes/IMG_0748.jpg" alt="Foto 2" class="active">
+                <img src="" alt="Foto 2 Siguiente" class="next-image">
+            </div>
+            <div class="collage-item">
+                <img src="imagenes/IMG_20241014_074132.jpg" alt="Foto 3" class="active">
+                <img src="" alt="Foto 3 Siguiente" class="next-image">
+            </div>
+            <div class="collage-item">
+                <img src="imagenes/WhatsApp Image 2026-05-12 at 7.14.54 PM.jpeg" alt="Foto 4" class="active">
+                <img src="" alt="Foto 4 Siguiente" class="next-image">
+            </div>
+        </div>
+    </div>
+
+    <!-- Botón Reproductor de Música -->
+    <div class="music-player" id="play-btn">
+        <!-- Ícono de Play (Por defecto) -->
+        <svg id="icon-play" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M8 5v14l11-7z"/>
+        </svg>
+        <!-- Ícono de Pause (Oculto por defecto) -->
+        <svg id="icon-pause" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="display: none;">
+            <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+        </svg>
+    </div>
+
+    <!-- PEGA AQUÍ EL ENLACE DE TU CANCIÓN -->
+    <audio id="bg-audio" loop autoplay>
+        <source src="musica/Brillas.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        // Lógica de los Poemas Aleatorios
+        const poems = [
+            "Eres mi lugar favorito, mi mayor alegría y la historia más hermosa que jamás imaginé escribir. Cada día contigo es un regalo.",
+            "Si tuviera que volver a elegir, te elegiría a ti en cada una de mis vidas. Eres mi coincidencia más bella.",
+            "No sé a dónde nos lleve la vida, pero espero que sea tomados de la mano. Eres todo lo que siempre soñé.",
+            "Tus ojos son mi paisaje favorito y tu sonrisa el mejor de mis refugios. Te amo más de lo que las palabras pueden expresar.",
+            "Contigo cada momento es poesía, cada silencio es música y cada abrazo es mi hogar perfecto.",
+            "Quédate conmigo siempre, porque contigo la vida es mucho más bonita. Eres el amor de mis días y mis noches.",
+            "Me enamoré de ti sabiendo que nuestro amor iba a ser una aventura. Gracias por ser la luz que ilumina mi camino.",
+            "Elegirte a ti fue la mejor decisión que he tomado. Eres y siempre serás mi persona favorita."
+        ];
+        
+        const poemText = document.getElementById('poem-text');
+        
+        function changePoem() {
+            poemText.classList.add('fade-out');
+            setTimeout(() => {
+                let randomIndex = Math.floor(Math.random() * poems.length);
+                // Evitar que se repita el mismo poema consecutivamente
+                while(poems[randomIndex] === poemText.textContent) {
+                    randomIndex = Math.floor(Math.random() * poems.length);
+                }
+                poemText.textContent = poems[randomIndex];
+                poemText.classList.remove('fade-out');
+            }, 1000); // Esperar el fade-out de CSS (1s)
+        }
+
+        // Cambiar el poema cada 8 segundos
+        setInterval(changePoem, 8000);
+
+        // Lógica de la Galería Animada (Collage aleatorio)
+        const allUserImages = [
+            "imagenes/20250605_102630.jpg",
+            "imagenes/488207328_2702861240103666_635878118305927599_n.jpg",
+            "imagenes/488803542_2708291416227315_1023688202938833341_n.jpg",
+            "imagenes/IMG-20250728-WA0044(1)(1).jpg",
+            "imagenes/IMG-20250808-WA0036(1).jpg",
+            "imagenes/IMG_0748.jpg",
+            "imagenes/IMG_20241014_074132.jpg",
+            "imagenes/WhatsApp Image 2026-05-12 at 7.14.54 PM.jpeg",
+            "imagenes/WhatsApp Image 2026-05-12 at 7.18.16 PM.jpeg",
+            "imagenes/WhatsApp Image 2026-05-12 at 7.27.17 PM.jpeg",
+            "imagenes/WhatsApp Image 2026-05-12 at 7.39.14 PM.jpeg",
+            "imagenes/WhatsApp Image 2026-05-12 at 7.45.07 PM.jpeg",
+            "imagenes/WhatsApp Image 2026-05-12 at 7.48.59 PM.jpeg"
+        ];
+        
+        const collageItems = document.querySelectorAll('.collage-item');
+
+        function changeRandomImage() {
+            // Escoger un cuadro del collage aleatorio
+            const randomItem = collageItems[Math.floor(Math.random() * collageItems.length)];
+            const currentImg = randomItem.querySelector('img.active');
+            const nextImg = randomItem.querySelector('img.next-image');
+            
+            // Escoger una imagen aleatoria
+            let newSrc = allUserImages[Math.floor(Math.random() * allUserImages.length)];
+            
+            // Si la imagen que seleccionamos es igual a la actual, cambiamos a otra
+            while(newSrc === currentImg.src) {
+                newSrc = allUserImages[Math.floor(Math.random() * allUserImages.length)];
+            }
+            
+            nextImg.src = newSrc;
+            
+            // Intercambiar las clases suavemente
+            nextImg.classList.add('active');
+            nextImg.classList.remove('next-image');
+            
+            currentImg.classList.remove('active');
+            currentImg.classList.add('next-image');
+        }
+
+        // Cambiar una imagen del collage aleatoriamente cada 2.5 segundos
+        setInterval(changeRandomImage, 2500);
+
+        // Lógica del Reproductor de Música Discreto
+        const audio = document.getElementById('bg-audio');
+        const playBtn = document.getElementById('play-btn');
+        const iconPlay = document.getElementById('icon-play');
+        const iconPause = document.getElementById('icon-pause');
+        let isPlaying = false;
+
+        function setPlayState() {
+            isPlaying = true;
+            iconPlay.style.display = 'none';
+            iconPause.style.display = 'block';
+            playBtn.classList.add('playing');
+        }
+
+        // Intentar reproducir automáticamente
+        window.addEventListener('load', () => {
+            audio.play().then(() => {
+                setPlayState();
+            }).catch(error => {
+                console.log('El navegador bloqueó el Autoplay. Esperando interacción del usuario.');
+                // Iniciar audio al primer clic en cualquier parte de la pantalla si el autoplay fue bloqueado
+                document.body.addEventListener('click', function initAudio() {
+                    if (!isPlaying) {
+                        audio.play().then(() => setPlayState());
+                    }
+                    document.body.removeEventListener('click', initAudio);
+                }, { once: true });
+            });
+        });
+
+        playBtn.addEventListener('click', (e) => {
+            e.stopPropagation(); // Evitar que el click se propague al body
+            if (isPlaying) {
+                audio.pause();
+                iconPause.style.display = 'none';
+                iconPlay.style.display = 'block';
+                playBtn.classList.remove('playing');
+            } else {
+                audio.play().then(() => {
+                    setPlayState();
+                }).catch(error => {
+                    console.log('Error al reproducir audio.');
+                });
+            }
+            isPlaying = !isPlaying;
+        });
+    </script>
+</body>
+</html>
