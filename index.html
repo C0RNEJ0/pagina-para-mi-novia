@@ -308,11 +308,18 @@
             const currentImg = randomItem.querySelector('img.active');
             const nextImg = randomItem.querySelector('img.next-image');
             
-            // Escoger una imagen aleatoria
-            let newSrc = allUserImages[Math.floor(Math.random() * allUserImages.length)];
+            // Obtener todas las imágenes actualmente en pantalla para evitar repetirlas
+            // Usamos getAttribute('src') en lugar de .src para obtener la ruta relativa exactamente igual al array
+            const visibleImages = Array.from(document.querySelectorAll('.collage-item img.active')).map(img => img.getAttribute('src'));
             
-            // Si la imagen que seleccionamos es igual a la actual, cambiamos a otra
-            while(newSrc === currentImg.src) {
+            // Filtrar las imágenes para elegir solo las que no se están mostrando ahora mismo
+            const availableImages = allUserImages.filter(src => !visibleImages.includes(src));
+            
+            // Escoger una imagen aleatoria de las disponibles
+            let newSrc;
+            if (availableImages.length > 0) {
+                newSrc = availableImages[Math.floor(Math.random() * availableImages.length)];
+            } else {
                 newSrc = allUserImages[Math.floor(Math.random() * allUserImages.length)];
             }
             
@@ -326,10 +333,10 @@
             currentImg.classList.add('next-image');
         }
 
-        // Ejecutar el cambio de imagen con un intervalo aleatorio (entre 2 y 9 segundos máximo)
+        // Ejecutar el cambio de imagen con un intervalo aleatorio
         function scheduleNextImageChange() {
-            // Tiempo aleatorio entre 2000 ms (2s) y 9000 ms (9s)
-            const randomDelay = Math.floor(Math.random() * (9000 - 2000 + 1)) + 2000;
+            // Tiempo aleatorio más rápido: entre 1500 ms (1.5s) y 4500 ms (4.5s)
+            const randomDelay = Math.floor(Math.random() * (4500 - 1500 + 1)) + 1500;
             setTimeout(() => {
                 changeRandomImage();
                 scheduleNextImageChange();
