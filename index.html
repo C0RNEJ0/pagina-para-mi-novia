@@ -3,484 +3,1043 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Feliz Cumpleaños, Mi Chiquita</title>
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
-    <style>
-        /* Variables de Color */
-        :root {
-            /* Degradado de fondo suave */
-            --bg-gradient-start: #fdfafb; /* Rosa muy pastel casi blanco */
-            --bg-gradient-end: #f4ebf4;   /* Lavanda suave pastel */
-            
-            /* Textos y Acentos */
-            --text-dark: #5e4c5a;   /* Morado grisáceo oscuro */
-            --text-light: #8a7385;
-            --accent-color: #d8a7b1; /* Rosa viejo elegante */
-            
-            /* Efectos Glassmorphism */
-            --card-bg: rgba(255, 255, 255, 0.5);
-            --shadow-soft: 0 20px 50px rgba(94, 76, 90, 0.08);
-            --shadow-hover: 0 25px 60px rgba(94, 76, 90, 0.12);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Montserrat', sans-serif;
-            background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-dark);
-            padding: 20px;
-            overflow-x: hidden;
-        }
-
-        /* Contenedor Principal (Tarjeta Glassmorphism) */
-        .card {
-            background: var(--card-bg);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.6);
-            border-radius: 32px;
-            padding: 40px 30px;
-            width: 100%;
-            max-width: 550px;
-            box-shadow: var(--shadow-soft);
-            text-align: center;
-            transition: all 0.5s ease;
-        }
-
-        .card:hover {
-            box-shadow: var(--shadow-hover);
-            transform: translateY(-5px);
-        }
-
-        /* Tipografía */
-        h1 {
-            font-family: 'Dancing Script', cursive;
-            font-size: 3.5rem;
-            margin-bottom: 15px;
-            background: linear-gradient(to right, #b887a2, #a1789c);
-            -webkit-background-clip: text;
-            color: transparent;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.02);
-        }
-
-        p.message {
-            font-size: 1.05rem;
-            line-height: 1.6;
-            color: var(--text-dark);
-            margin-bottom: 35px;
-            font-weight: 300;
-            transition: opacity 1s ease-in-out;
-            min-height: 70px; /* Para evitar que la tarjeta cambie de tamaño bruscamente */
-        }
-
-        p.message.fade-out {
-            opacity: 0;
-        }
-
-        /* Galería Animada Collage */
-        .gallery-container {
-            width: 100%;
-            height: 380px;
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            grid-template-rows: repeat(2, 1fr);
-            gap: 12px;
-            margin-bottom: 20px;
-        }
-
-        .collage-item {
-            position: relative;
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.06);
-            background: #fff;
-        }
-
-        .collage-item img {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            opacity: 0;
-            transition: opacity 1.5s ease-in-out, transform 8s ease;
-            transform: scale(1.05);
-        }
-
-        .collage-item img.active {
-            opacity: 1;
-            transform: scale(1);
-        }
-
-        /* Controles de Música */
-        .music-controls {
-            position: fixed;
-            bottom: 40px;
-            right: 40px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            z-index: 100;
-        }
-
-        .music-btn {
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(12px);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            cursor: pointer;
-            transition: all 0.4s ease;
-            border: 1px solid rgba(255, 255, 255, 0.8);
-        }
-
-        .music-player {
-            width: 56px;
-            height: 56px;
-        }
-
-        .music-next {
-            width: 44px;
-            height: 44px;
-        }
-
-        .music-btn:hover {
-            transform: scale(1.1);
-            background: #ffffff;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
-        }
-
-        .music-btn svg {
-            fill: #b887a2;
-            transition: fill 0.3s ease;
-        }
-
-        .music-player svg { width: 22px; height: 22px; }
-        .music-next svg { width: 18px; height: 18px; }
-
-        /* Animación de ondas musicales (cuando reproduce) */
-        .music-player.playing {
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(184, 135, 162, 0.4); }
-            70% { box-shadow: 0 0 0 15px rgba(184, 135, 162, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(184, 135, 162, 0); }
-        }
-
-        /* Responsive Design */
-        @media (max-width: 600px) {
-            h1 { font-size: 2.8rem; }
-            .card { padding: 30px 20px; border-radius: 24px; }
-            .gallery-container { height: 320px; }
-            .music-controls { bottom: 20px; right: 20px; }
-            .music-player { width: 50px; height: 50px; }
-            .music-next { width: 40px; height: 40px; }
-        }
-    </style>
+    <meta name="description" content="Módulo de Servicios Electrónicos del Poder Judicial del Estado de Tamaulipas - Acceso digital a trámites, expedientes, citas y notificaciones.">
+    <title>Módulo de Servicios Electrónicos | Poder Judicial de Tamaulipas</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    
+    <!-- FontAwesome 6 for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
+    <!-- Estilos Personalizados -->
+    <link rel="stylesheet" href="custom.css">
 </head>
 <body>
 
-    <div class="card">
-        <h1>Feliz Cumpleaños, Mi Chiquita</h1>
-        <p class="message" id="poem-text">Eres mi lugar favorito, mi mayor alegría y la historia más hermosa que jamás imaginé escribir. Cada día contigo es un regalo.</p>
+    <!-- ==========================================================================
+         Navbar Superior (Común para todas las vistas)
+         ========================================================================== -->
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom">
+        <div class="container-fluid">
+            <!-- Logotipo Institucional Horizontal 2025 -->
+            <a class="navbar-brand d-flex align-items-center" href="#inicio">
+                <img src="logos/LOGO-PODER-JUDICIAL-2025.png" alt="Poder Judicial de Tamaulipas Logo" class="d-inline-block align-text-top">
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarText">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0 me-4">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#inicio">Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#tramites">Trámites</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#citas">Citas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#transparencia">Transparencia</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#contacto">Contacto</a>
+                    </li>
+                </ul>
+                
+                <!-- Badge de Sesión del Usuario -->
+                <div class="user-session-badge">
+                    <i class="fa-solid fa-user-tie"></i>
+                    <span>JUZGADO DEMO TRIBUNAL ELECTRONICO (VICTORIA)</span>
+                    <span class="mx-1">|</span>
+                    <a class="btn-logout">Terminar Sesión</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ==========================================================================
+         VISTA 1: PORTAL DE ACCESOS DIRECTOS (LANDING VIEW)
+         ========================================================================== -->
+    <div id="landing-view">
         
-        <div class="gallery-container">
-            <div class="collage-item">
-                <img src="imagenes/20250605_102630.jpg" alt="Foto 1" class="active">
-                <img src="" alt="Foto 1 Siguiente" class="next-image">
+        <!-- Hero Section -->
+        <header class="hero-section">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-6 px-4">
+                        <h1 class="hero-title">BIENVENIDO AL PORTAL DE SERVICIOS ELECTRÓNICOS</h1>
+                        <p class="hero-subtitle">
+                            Acceda de manera ágil, segura y transparente a las herramientas digitales del Poder Judicial de Tamaulipas. Gestione expedientes, consulte promociones, agende citas y realice pagos oficiales en línea.
+                        </p>
+                        <div class="d-flex gap-3">
+                            <button class="btn btn-brand-filled" onclick="document.querySelector('[data-service-target=\'autorizar-expedientes\']').click()">
+                                Iniciar Consulta
+                            </button>
+                            <a href="#contacto" class="btn btn-brand-outline d-none d-sm-inline-block" onclick="document.querySelector('footer').scrollIntoView({ behavior: 'smooth' })">
+                                Ayuda y Contacto
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 px-4">
+                        <div class="hero-image-container">
+                            <img src="logos/office_background.png" alt="Oficinas del Poder Judicial" class="hero-image">
+                            <div class="hero-image-overlay"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="collage-item">
-                <img src="imagenes/IMG_0748.jpg" alt="Foto 2" class="active">
-                <img src="" alt="Foto 2 Siguiente" class="next-image">
+        </header>
+
+        <!-- Services Grid Section -->
+        <main class="services-grid-section">
+            <div class="container">
+                <div class="row">
+                    <!-- Tarjeta 1: Consulta de Expedientes -->
+                    <div class="col-lg-4 col-md-6 mb-4">
+                        <div class="service-card" data-service-target="autorizar-expedientes">
+                            <div class="service-icon-wrapper">
+                                <i class="fa-solid fa-folder-open"></i>
+                            </div>
+                            <h2 class="service-title">Consulta de Expedientes</h2>
+                            <p class="service-description">
+                                Solicite autorizaciones y consulte los expedientes asignados a su cuenta en las diferentes materias judiciales.
+                            </p>
+                            <button class="btn btn-brand-outline">Acceder</button>
+                        </div>
+                    </div>
+
+                    <!-- Tarjeta 2: Citas en Línea -->
+                    <div class="col-lg-4 col-md-6 mb-4">
+                        <div class="service-card" data-service-target="citas">
+                            <div class="service-icon-wrapper">
+                                <i class="fa-solid fa-calendar-check"></i>
+                            </div>
+                            <h2 class="service-title">Citas en Línea</h2>
+                            <p class="service-description">
+                                Calendar para portal de servicios electrónicos. Agende, verifique o cancele citas con los diferentes juzgados.
+                            </p>
+                            <button class="btn btn-brand-filled">Agendar</button>
+                        </div>
+                    </div>
+
+                    <!-- Tarjeta 3: Trámites Jurisdiccionales -->
+                    <div class="col-lg-4 col-md-6 mb-4">
+                        <div class="service-card" data-service-target="promociones-electronicas">
+                            <div class="service-icon-wrapper">
+                                <i class="fa-solid fa-gavel"></i>
+                            </div>
+                            <h2 class="service-title">Trámites Jurisdiccionales</h2>
+                            <p class="service-description">
+                                Presente promociones electrónicas, revise edictos enviados y consulte listas de acuerdos firmados.
+                            </p>
+                            <button class="btn btn-brand-filled">Consultar</button>
+                        </div>
+                    </div>
+
+                    <!-- Tarjeta 4: Pago de Derechos -->
+                    <div class="col-lg-4 col-md-6 mb-4">
+                        <div class="service-card" data-service-target="pagos">
+                            <div class="service-icon-wrapper">
+                                <i class="fa-solid fa-credit-card"></i>
+                            </div>
+                            <h2 class="service-title">Pago de Derechos</h2>
+                            <p class="service-description">
+                                Realice y consulte de forma electrónica el pago de derechos y aranceles procesales autorizados.
+                            </p>
+                            <button class="btn btn-brand-outline">Pagar</button>
+                        </div>
+                    </div>
+
+                    <!-- Tarjeta 5: Autenticación Digital -->
+                    <div class="col-lg-4 col-md-6 mb-4">
+                        <div class="service-card" data-service-target="abogados-sg">
+                            <div class="service-icon-wrapper">
+                                <i class="fa-solid fa-key"></i>
+                            </div>
+                            <h2 class="service-title">Autenticación Digital</h2>
+                            <p class="service-description">
+                                Revise los registros oficiales de abogados autorizados ante la Secretaría General de Acuerdos.
+                            </p>
+                            <button class="btn btn-brand-filled">Ingresar</button>
+                        </div>
+                    </div>
+
+                    <!-- Tarjeta 6: Directorio de Juzgados -->
+                    <div class="col-lg-4 col-md-6 mb-4">
+                        <div class="service-card" data-service-target="monitoreo-pbc">
+                            <div class="service-icon-wrapper">
+                                <i class="fa-solid fa-compass"></i>
+                            </div>
+                            <h2 class="service-title">Directorio de Juzgados</h2>
+                            <p class="service-description">
+                                Localice juzgados por materia y distrito, y realice el monitoreo de los sistemas electrónicos activos.
+                            </p>
+                            <button class="btn btn-brand-filled">Buscar</button>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="collage-item">
-                <img src="imagenes/IMG_20241014_074132.jpg" alt="Foto 3" class="active">
-                <img src="" alt="Foto 3 Siguiente" class="next-image">
-            </div>
-            <div class="collage-item">
-                <img src="imagenes/WhatsApp Image 2026-05-12 at 7.14.54 PM.jpeg" alt="Foto 4" class="active">
-                <img src="" alt="Foto 4 Siguiente" class="next-image">
+        </main>
+    </div>
+
+    <!-- ==========================================================================
+         VISTA 2: ESPACIO DE TRABAJO DEL MÓDULO DE SERVICIOS (WORKSPACE VIEW)
+         ========================================================================== -->
+    <div id="workspace-view" class="workspace-wrapper">
+        
+        <!-- Cabecera del Espacio de Trabajo -->
+        <header class="workspace-header">
+            <h3 class="workspace-title">
+                <i class="fa-solid fa-cubes text-magenta"></i> 
+                Módulo de Servicios Electrónicos
+            </h3>
+            
+            <button class="btn-back-home btn btn-brand-outline">
+                <i class="fas fa-arrow-left"></i> Volver al Portal Principal
+            </button>
+        </header>
+
+        <div class="container-fluid workspace-container p-0">
+            <div class="row g-0 w-100">
+                <!-- Sidebar Lateral - 11 Pestañas Originales -->
+                <aside class="col-lg-3 workspace-sidebar">
+                    <ul class="sidebar-nav">
+                        <li>
+                            <a class="sidebar-link active" data-tab="autorizar-expedientes">
+                                <i class="fa-solid fa-folder-plus text-success"></i> Autorizar Expedientes
+                            </a>
+                        </li>
+                        <li>
+                            <a class="sidebar-link" data-tab="expedientes-autorizados">
+                                <i class="fa-solid fa-folder-closed text-primary"></i> Expedientes Autorizados
+                            </a>
+                        </li>
+                        <li>
+                            <a class="sidebar-link" data-tab="npe">
+                                <i class="fa-solid fa-envelope text-info"></i> NPE (Notificaciones Pers.)
+                            </a>
+                        </li>
+                        <li>
+                            <a class="sidebar-link" data-tab="notificacion-juzgado">
+                                <i class="fa-solid fa-gavel text-warning"></i> Notificación en Juzgado
+                            </a>
+                        </li>
+                        <li>
+                            <a class="sidebar-link" data-tab="abogados-sg">
+                                <i class="fa-solid fa-user-tie text-secondary"></i> Abogados Sría. Gral.
+                            </a>
+                        </li>
+                        <li>
+                            <a class="sidebar-link" data-tab="edictos-enviados">
+                                <i class="fa-solid fa-file-signature"></i> Edictos Enviados P.O.
+                            </a>
+                        </li>
+                        <li>
+                            <a class="sidebar-link" data-tab="listas-enviadas">
+                                <i class="fa-solid fa-list-check"></i> Listas Enviadas
+                            </a>
+                        </li>
+                        <li>
+                            <a class="sidebar-link" data-tab="promociones-electronicas">
+                                <i class="fa-solid fa-file-arrow-up"></i> Promociones Electrónicas
+                            </a>
+                        </li>
+                        <li>
+                            <a class="sidebar-link" data-tab="citas">
+                                <i class="fa-solid fa-calendar-days"></i> Citas del Juzgado
+                            </a>
+                        </li>
+                        <li>
+                            <a class="sidebar-link" data-tab="pagos">
+                                <i class="fa-solid fa-credit-card"></i> Pagos Registrados
+                            </a>
+                        </li>
+                        <li>
+                            <a class="sidebar-link" data-tab="monitoreo-pbc">
+                                <i class="fa-solid fa-desktop"></i> Monitoreo P.B.C.
+                            </a>
+                        </li>
+                    </ul>
+                </aside>
+
+                <!-- Área de Contenido de Pestañas -->
+                <main class="col-lg-9 workspace-content">
+                    
+                    <!-- ==========================================
+                         Pestaña 1: Autorizar Expedientes
+                         ========================================== -->
+                    <section class="tab-pane-custom active" id="autorizar-expedientes">
+                        <div class="content-card">
+                            <h4 class="content-title"><i class="fa-solid fa-folder-plus text-success"></i> Autorización de Expedientes</h4>
+                            
+                            <form class="search-form-container">
+                                <div class="row g-3 align-items-end">
+                                    <div class="col-md-4">
+                                        <label for="select-tipo-asunto" class="form-label">Tipo de Asunto:</label>
+                                        <select id="select-tipo-asunto" class="form-select">
+                                            <option value="EXPEDIENTE">EXPEDIENTE</option>
+                                            <option value="TOCA">TOCA</option>
+                                            <option value="EXHORTO">EXHORTO</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <label class="form-label">Número y Año:</label>
+                                        <div class="input-group">
+                                            <input type="text" id="input-num-exp" class="form-control" placeholder="Número (Ej. 00149)" aria-label="Número">
+                                            <span class="input-group-text">/</span>
+                                            <input type="text" id="input-anio-exp" class="form-control" placeholder="Año (Ej. 2011)" aria-label="Año">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <button type="button" id="btn-consultar-autorizar" class="btn btn-brand-filled w-100">Consultar</button>
+                                    </div>
+                                </div>
+                            </form>
+                            
+                            <!-- Contenedor para Resultados de Búsqueda Simulados -->
+                            <div id="container-resultados-autorizar"></div>
+                        </div>
+                    </section>
+
+                    <!-- ==========================================
+                         Pestaña 2: Expedientes Autorizados
+                         ========================================== -->
+                    <section class="tab-pane-custom" id="expedientes-autorizados">
+                        <div class="content-card">
+                            <h4 class="content-title"><i class="fa-solid fa-folder-closed text-primary"></i> Expedientes Autorizados</h4>
+                            
+                            <form class="search-form-container">
+                                <div class="row g-3 align-items-end">
+                                    <div class="col-md-3">
+                                        <label class="form-label">Año:</label>
+                                        <select class="form-select">
+                                            <option value="2026">2026</option>
+                                            <option value="2025">2025</option>
+                                            <option value="2024">2024</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label">Mes:</label>
+                                        <select class="form-select">
+                                            <option value="MAYO">MAYO</option>
+                                            <option value="ABRIL">ABRIL</option>
+                                            <option value="MARZO">MARZO</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label">Materia:</label>
+                                        <select class="form-select">
+                                            <option value="CIVIL">CIVIL</option>
+                                            <option value="FAMILIAR">FAMILIAR</option>
+                                            <option value="MERCANTIL">MERCANTIL</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <button type="button" class="btn btn-brand-filled w-100" onclick="alert('Consulta realizada para los filtros seleccionados.')">Consultar</button>
+                                    </div>
+                                </div>
+                            </form>
+                            
+                            <p class="text-secondary small my-3">
+                                Expedientes autorizados en el mes de <strong>MAYO de 2026</strong> de la materia <strong>CIVIL</strong>.
+                            </p>
+                            
+                            <div class="table-responsive">
+                                <table class="table table-hover table-custom">
+                                    <thead>
+                                        <tr>
+                                            <th>Expediente</th>
+                                            <th>Litigante/Persona</th>
+                                            <th>Fecha de Alta</th>
+                                            <th>Personalidad</th>
+                                            <th class="text-center">Ac</th>
+                                            <th class="text-center">NPE</th>
+                                            <th class="text-center">PE</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td colspan="7" class="text-center py-4 text-muted">
+                                                No se encontraron registros.
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- ==========================================
+                         Pestaña 3: NPE (Notificaciones Personales)
+                         ========================================== -->
+                    <section class="tab-pane-custom" id="npe">
+                        <div class="content-card">
+                            <h4 class="content-title"><i class="fa-solid fa-envelope text-info"></i> Notificaciones Personales Electrónicas</h4>
+                            
+                            <div class="search-form-container d-flex flex-wrap align-items-center justify-content-center gap-3">
+                                <button type="button" id="npe-prev-day" class="btn btn-brand-outline px-3"><i class="fas fa-chevron-left"></i></button>
+                                <input type="text" id="npe-date-input" class="form-control text-center font-weight-bold" style="width: 150px;" placeholder="dd/mm/aaaa">
+                                <button type="button" id="npe-next-day" class="btn btn-brand-outline px-3"><i class="fas fa-chevron-right"></i></button>
+                                <button type="button" class="btn btn-brand-filled px-4" onclick="alert('Consulta de NPE actualizada.')">Consultar</button>
+                            </div>
+                            
+                            <p class="text-secondary small my-3" id="npe-date-label">
+                                Notificaciones enviadas del día <strong>MARTES, 19 DE MAYO DE 2026</strong>.
+                            </p>
+                            
+                            <div class="table-responsive">
+                                <table class="table table-hover table-custom">
+                                    <thead>
+                                        <tr>
+                                            <th>Hora Envío</th>
+                                            <th>Expediente</th>
+                                            <th>Materia</th>
+                                            <th>Destinatario</th>
+                                            <th>Estatus</th>
+                                            <th class="text-center">Acuerdos</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td colspan="6" class="text-center py-4 text-muted">
+                                                No hay notificaciones personales registradas para este día.
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- ==========================================
+                         Pestaña 4: Notificación en Juzgado
+                         ========================================== -->
+                    <section class="tab-pane-custom" id="notificacion-juzgado">
+                        <div class="content-card">
+                            <h4 class="content-title"><i class="fa-solid fa-gavel text-warning"></i> Notificación en Juzgado</h4>
+                            
+                            <form class="search-form-container">
+                                <div class="row g-3 align-items-end">
+                                    <div class="col-md-3">
+                                        <label class="form-label">Materia:</label>
+                                        <select class="form-select">
+                                            <option>CIVIL</option>
+                                            <option>FAMILIAR</option>
+                                            <option>MERCANTIL</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label">Tipo de Asunto:</label>
+                                        <select class="form-select">
+                                            <option>EXPEDIENTE</option>
+                                            <option>EXHORTO</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Número de EXPEDIENTE:</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" placeholder="Ej. 00001">
+                                            <span class="input-group-text">/</span>
+                                            <input type="text" class="form-control" placeholder="Año">
+                                        </div>
+                                        <small class="text-muted text-xs d-block mt-1">Ejemplo: 00001/2015, CP/0001/2020.</small>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <button type="button" class="btn btn-brand-filled w-100" onclick="alert('Iniciando búsqueda de notificaciones...')">Buscar</button>
+                                    </div>
+                                </div>
+                            </form>
+                            
+                            <div class="table-responsive mt-4">
+                                <table class="table table-hover table-custom">
+                                    <thead>
+                                        <tr>
+                                            <th>Fecha Notificación</th>
+                                            <th>Expediente</th>
+                                            <th>Secretaría</th>
+                                            <th>Descripción / Sentido del Acuerdo</th>
+                                            <th class="text-center">Ver</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td colspan="5" class="text-center py-4 text-muted">
+                                                Use el buscador superior para consultar las notificaciones físicas y electrónicas de este juzgado.
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- ==========================================
+                         Pestaña 5: Abogados Sría. Gral.
+                         ========================================== -->
+                    <section class="tab-pane-custom" id="abogados-sg">
+                        <div class="content-card">
+                            <h4 class="content-title"><i class="fa-solid fa-user-tie text-secondary"></i> Abogados Registrados en Secretaría General de Acuerdos</h4>
+                            
+                            <form class="search-form-container">
+                                <div class="row g-3 align-items-end">
+                                    <div class="col-md-9">
+                                        <label for="input-buscar-abogado" class="form-label">Escriba el nombre o el número de registro del abogado que desea buscar:</label>
+                                        <input type="text" id="input-buscar-abogado" class="form-control" placeholder="Escriba el nombre del abogado a buscar">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <button type="button" id="btn-buscar-abogado" class="btn btn-brand-filled w-100">Buscar</button>
+                                    </div>
+                                </div>
+                            </form>
+                            
+                            <div class="table-responsive mt-4">
+                                <table class="table table-hover table-custom" id="table-abogados">
+                                    <thead>
+                                        <tr>
+                                            <th>Registro</th>
+                                            <th>Nombre Completo</th>
+                                            <th>Fecha Registro</th>
+                                            <th>Estatus</th>
+                                            <th>Secretaría</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><strong>10934</strong></td>
+                                            <td>LIC. CARLOS ALBERTO MARTÍNEZ GÓMEZ</td>
+                                            <td>12/04/2018</td>
+                                            <td><span class="status-badge status-approved">ACTIVO</span></td>
+                                            <td>S.G.A.</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>08453</strong></td>
+                                            <td>DRA. MARÍA ELENA LÓPEZ BUSTAMANTE</td>
+                                            <td>05/11/2012</td>
+                                            <td><span class="status-badge status-approved">ACTIVO</span></td>
+                                            <td>S.G.A.</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>14562</strong></td>
+                                            <td>LIC. JUAN RAMÓN PÉREZ HERNÁNDEZ</td>
+                                            <td>19/08/2021</td>
+                                            <td><span class="status-badge status-rejected">INACTIVO</span></td>
+                                            <td>S.G.A.</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- ==========================================
+                         Pestaña 6: Edictos Enviados P.O.
+                         ========================================== -->
+                    <section class="tab-pane-custom" id="edictos-enviados">
+                        <div class="content-card">
+                            <h4 class="content-title"><i class="fa-solid fa-file-signature text-burgundy"></i> Edictos Enviados a Internet</h4>
+                            
+                            <form class="search-form-container">
+                                <div class="row g-3 align-items-end">
+                                    <div class="col-md-4">
+                                        <label class="form-label">Año:</label>
+                                        <select class="form-select">
+                                            <option>2026</option>
+                                            <option>2025</option>
+                                            <option>2024</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Mes:</label>
+                                        <select class="form-select">
+                                            <option>MAYO</option>
+                                            <option>ABRIL</option>
+                                            <option>MARZO</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <button type="button" class="btn btn-brand-filled w-100" onclick="alert('Edictos consultados.')">Consultar</button>
+                                    </div>
+                                </div>
+                            </form>
+                            
+                            <p class="text-secondary small my-3">
+                                Edictos enviados a Internet el mes de <strong>MAYO de 2026</strong>.
+                            </p>
+                            
+                            <h5 class="mt-4 font-weight-bold" style="color: var(--color-graphite);">Edictos Pendientes de Publicar</h5>
+                            <div class="table-responsive mb-4">
+                                <table class="table table-hover table-custom">
+                                    <thead>
+                                        <tr>
+                                            <th>Fecha Hora Envío</th>
+                                            <th>Número Expediente</th>
+                                            <th>Juicio Síntesis</th>
+                                            <th>Fecha</th>
+                                            <th class="text-center">Ver</th>
+                                            <th class="text-center">Borrar</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td colspan="6" class="text-center py-3 text-muted">
+                                                No hay Edictos pendientes de publicar para el mes seleccionado.
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <h5 class="mt-4 font-weight-bold" style="color: var(--color-graphite);">Edictos Publicados</h5>
+                            <div class="table-responsive">
+                                <table class="table table-hover table-custom">
+                                    <thead>
+                                        <tr>
+                                            <th>Fecha Hora Envío</th>
+                                            <th>Número Expediente</th>
+                                            <th>Juicio Síntesis</th>
+                                            <th>Fecha</th>
+                                            <th class="text-center">Ver</th>
+                                            <th class="text-center">Enlace(s)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td colspan="6" class="text-center py-3 text-muted">
+                                                No hay Edictos publicados para el mes seleccionado.
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- ==========================================
+                         Pestaña 7: Listas Enviadas
+                         ========================================== -->
+                    <section class="tab-pane-custom" id="listas-enviadas">
+                        <div class="content-card">
+                            <h4 class="content-title"><i class="fa-solid fa-list-check text-burgundy"></i> Listas de Acuerdos</h4>
+                            
+                            <form class="search-form-container">
+                                <div class="row g-3 align-items-end">
+                                    <div class="col-md-3">
+                                        <label class="form-label">Año:</label>
+                                        <select class="form-select">
+                                            <option>2026</option>
+                                            <option>2025</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label">Mes:</label>
+                                        <select class="form-select">
+                                            <option>MAYO</option>
+                                            <option>ABRIL</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label">Materia:</label>
+                                        <select class="form-select">
+                                            <option>CIVIL</option>
+                                            <option>FAMILIAR</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <button type="button" class="btn btn-brand-filled w-100" onclick="alert('Consulta de listas finalizada.')">Consultar</button>
+                                    </div>
+                                </div>
+                            </form>
+                            
+                            <p class="text-secondary small my-3">
+                                Listas de acuerdos del mes de <strong>MAYO de 2026</strong> de la materia <strong>CIVIL</strong>.
+                            </p>
+                            
+                            <div class="table-responsive">
+                                <table class="table table-hover table-custom">
+                                    <thead>
+                                        <tr>
+                                            <th>Día</th>
+                                            <th>Acuerdos</th>
+                                            <th>Fecha de Liberación</th>
+                                            <th>Hora de Liberación</th>
+                                            <th class="text-center">Ver Lista</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td colspan="5" class="text-center py-4 text-muted">
+                                                No hay listas de acuerdos para el mes seleccionado.
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- ==========================================
+                         Pestaña 8: Promociones Electrónicas
+                         ========================================== -->
+                    <section class="tab-pane-custom" id="promociones-electronicas">
+                        <div class="content-card">
+                            <h4 class="content-title"><i class="fa-solid fa-file-arrow-up text-burgundy"></i> Promociones Electrónicas</h4>
+                            
+                            <div class="search-form-container d-flex flex-wrap align-items-center justify-content-center gap-3">
+                                <button type="button" id="pe-prev-day" class="btn btn-brand-outline px-3"><i class="fas fa-chevron-left"></i></button>
+                                <input type="text" id="pe-date-input" class="form-control text-center font-weight-bold" style="width: 150px;" placeholder="dd/mm/aaaa">
+                                <button type="button" id="pe-next-day" class="btn btn-brand-outline px-3"><i class="fas fa-chevron-right"></i></button>
+                                <button type="button" class="btn btn-brand-filled px-4" onclick="alert('Consulta de promociones actualizada.')">Consultar</button>
+                            </div>
+                            
+                            <p class="text-secondary small my-3" id="pe-date-label">
+                                Promociones Electrónicas del día <strong>MARTES, 19 DE MAYO DE 2026</strong>.
+                            </p>
+                            
+                            <div class="table-responsive">
+                                <table class="table table-hover table-custom">
+                                    <thead>
+                                        <tr>
+                                            <th>Hora</th>
+                                            <th>Número Expediente</th>
+                                            <th>Presenta</th>
+                                            <th>Acordada</th>
+                                            <th>Archivos</th>
+                                            <th class="text-center">Ver</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td colspan="6" class="text-center py-4 text-muted">
+                                                No hay Promociones Electrónicas del día seleccionado.
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- ==========================================
+                         Pestaña 9: Citas
+                         ========================================== -->
+                    <section class="tab-pane-custom" id="citas">
+                        <div class="content-card">
+                            <h4 class="content-title"><i class="fa-solid fa-calendar-days text-burgundy"></i> Citas de Juzgado</h4>
+                            
+                            <!-- Subnavegación de Citas -->
+                            <div class="citas-subnav">
+                                <div class="citas-nav-btn btn-pendientes active" data-citas-type="pendientes">Ver Citas Pendientes (3)</div>
+                                <div class="citas-nav-btn btn-agendadas" data-citas-type="agendadas">Ver Citas Agendadas</div>
+                                <div class="citas-nav-btn btn-denegadas" data-citas-type="denegadas">Ver Citas Denegadas</div>
+                                <div class="citas-nav-btn" data-citas-type="agendar"><i class="fa-solid fa-calendar-plus me-1"></i> Agendar Cita</div>
+                                <div class="citas-nav-btn" data-citas-type="consultar"><i class="fa-solid fa-magnifying-glass me-1"></i> Consultar por Fecha</div>
+                            </div>
+                            
+                            <!-- Controles de la Tabla -->
+                            <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2">
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="small text-secondary">Mostrar</span>
+                                    <select class="form-select form-select-sm" style="width: auto;">
+                                        <option>25</option>
+                                        <option>50</option>
+                                        <option>100</option>
+                                    </select>
+                                    <span class="small text-secondary">registros</span>
+                                </div>
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="small text-secondary">Buscar:</span>
+                                    <input type="text" class="form-control form-control-sm table-search-input" data-target-table="citas-table" placeholder="Escriba para filtrar...">
+                                </div>
+                            </div>
+                            
+                            <h5 id="citas-table-title" class="font-weight-bold mb-3" style="color: var(--color-graphite);">Ver Citas Pendientes (3)</h5>
+                            
+                            <div class="table-responsive">
+                                <table class="table table-hover table-custom" id="citas-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Fecha Solicitud</th>
+                                            <th>Fecha Atendido</th>
+                                            <th class="text-center" style="width: 130px;">Folio/Estatus</th>
+                                            <th>Fecha Horario</th>
+                                            <th>Solicitante / Asistente</th>
+                                            <th>Descripción</th>
+                                            <th class="text-center">Ver / Imprimir</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- Se carga dinámicamente o por defecto las 3 pendientes -->
+                                        <tr>
+                                            <td>05/03/2026</td>
+                                            <td>[NO ESPECIFICADO]</td>
+                                            <td>
+                                                <span class="status-badge status-pending d-block text-center font-weight-bold mb-1">PENDIENTE</span>
+                                                <small class="text-secondary d-block text-center">0035531</small>
+                                            </td>
+                                            <td><strong>- -</strong></td>
+                                            <td>
+                                                <span class="d-block small"><strong>Solicitante:</strong> JUAN PEREZ DEMO</span>
+                                                <span class="d-block small text-muted"><strong>Asistente:</strong> JUAN PEREZ DEMO</span>
+                                            </td>
+                                            <td><div style="max-width: 250px; font-size: 0.85rem;">EXPEDIENTE: 00149/2011, Materia: Civil Motivo: Recoger copias</div></td>
+                                            <td class="text-center">
+                                                <button class="btn btn-outline-secondary btn-sm p-1 px-2" title="Imprimir" onclick="alert('Generando ticket de cita...')">
+                                                    <i class="fas fa-print"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>14/04/2026</td>
+                                            <td>[NO ESPECIFICADO]</td>
+                                            <td>
+                                                <span class="status-badge status-pending d-block text-center font-weight-bold mb-1">PENDIENTE</span>
+                                                <small class="text-secondary d-block text-center">0042509</small>
+                                            </td>
+                                            <td><strong>- -</strong></td>
+                                            <td>
+                                                <span class="d-block small"><strong>Solicitante:</strong> JUAN PEREZ DEMO</span>
+                                                <span class="d-block small text-muted"><strong>Asistente:</strong> JUAN PEREZ DEMO</span>
+                                            </td>
+                                            <td><div style="max-width: 250px; font-size: 0.85rem;">EXPEDIENTE: 00149/2011, Materia: Civil Motivo: Presentar pruebas</div></td>
+                                            <td class="text-center">
+                                                <button class="btn btn-outline-secondary btn-sm p-1 px-2" title="Imprimir" onclick="alert('Generando ticket de cita...')">
+                                                    <i class="fas fa-print"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>17/05/2026</td>
+                                            <td>[NO ESPECIFICADO]</td>
+                                            <td>
+                                                <span class="status-badge status-pending d-block text-center font-weight-bold mb-1">PENDIENTE</span>
+                                                <small class="text-secondary d-block text-center">0043079</small>
+                                            </td>
+                                            <td><strong>- -</strong></td>
+                                            <td>
+                                                <span class="d-block small"><strong>Solicitante:</strong> JUAN PEREZ DEMO</span>
+                                                <span class="d-block small text-muted"><strong>Asistente:</strong> JUAN PEREZ DEMO</span>
+                                            </td>
+                                            <td><div style="max-width: 250px; font-size: 0.85rem;">EXPEDIENTE: 00149/2011, Materia: Civil Motivo: Audiencia de avenencia</div></td>
+                                            <td class="text-center">
+                                                <button class="btn btn-outline-secondary btn-sm p-1 px-2" title="Imprimir" onclick="alert('Generando ticket de cita...')">
+                                                    <i class="fas fa-print"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- ==========================================
+                         Pestaña 10: Pagos
+                         ========================================== -->
+                    <section class="tab-pane-custom" id="pagos">
+                        <div class="content-card">
+                            <h4 class="content-title"><i class="fa-solid fa-credit-card text-burgundy"></i> Pagos Registrados</h4>
+                            
+                            <form class="search-form-container">
+                                <div class="row g-3 align-items-center">
+                                    <div class="col-md-8">
+                                        <div class="d-flex align-items-center gap-3 flex-wrap">
+                                            <label class="form-label mb-0">Seleccione la materia y/o el año:</label>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <span class="small text-secondary">Materia</span>
+                                                <select class="form-select form-select-sm" style="width: auto;">
+                                                    <option>Civil</option>
+                                                    <option>Familiar</option>
+                                                </select>
+                                            </div>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <span class="small text-secondary">Año</span>
+                                                <select class="form-select form-select-sm" style="width: auto;">
+                                                    <option>2026</option>
+                                                    <option>2025</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 text-end">
+                                        <button type="button" class="btn btn-brand-filled btn-sm" onclick="alert('Historial de pagos consultado.')">Filtrar Historial</button>
+                                    </div>
+                                </div>
+                            </form>
+                            
+                            <!-- Controles de Tabla de Pagos -->
+                            <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2">
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="small text-secondary">Mostrar</span>
+                                    <select class="form-select form-select-sm" style="width: auto;">
+                                        <option>100</option>
+                                        <option>50</option>
+                                        <option>25</option>
+                                    </select>
+                                    <span class="small text-secondary">registros</span>
+                                </div>
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="small text-secondary">Buscar:</span>
+                                    <input type="text" class="form-control form-control-sm table-search-input" data-target-table="pagos-table" placeholder="Escriba para filtrar...">
+                                </div>
+                            </div>
+                            
+                            <div class="table-responsive">
+                                <table class="table table-hover table-custom" id="pagos-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Folio</th>
+                                            <th>Persona / Correo Electrónico</th>
+                                            <th>Expediente</th>
+                                            <th>Tipo de Servicio</th>
+                                            <th>Estatus</th>
+                                            <th class="text-center">Ver</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td colspan="6" class="text-center py-4 text-muted">
+                                                No hay pagos registrados para este periodo.
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <div class="d-flex justify-content-between align-items-center mt-3 flex-wrap gap-2">
+                                <span class="small text-secondary">Ningún pago que mostrar</span>
+                                <nav aria-label="Navegación de tabla">
+                                    <ul class="pagination pagination-sm m-0">
+                                        <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1" aria-disabled="true">Anterior</a></li>
+                                        <li class="page-item disabled"><a class="page-link" href="#">Siguiente</a></li>
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- ==========================================
+                         Pestaña 11: Monitoreo P.B.C (Sistema de Transacciones y Status)
+                         ========================================== -->
+                    <section class="tab-pane-custom" id="monitoreo-pbc">
+                        <div class="content-card">
+                            <h4 class="content-title"><i class="fa-solid fa-desktop text-burgundy"></i> Monitoreo del Tribunal Electrónico (P.B.C)</h4>
+                            
+                            <div class="row g-4 mb-4">
+                                <div class="col-md-4">
+                                    <div class="card p-3 border-0 bg-success bg-opacity-10 text-success text-center">
+                                        <i class="fa-solid fa-circle-check fa-2x mb-2"></i>
+                                        <h6 class="mb-1 font-weight-bold">Base de Datos</h6>
+                                        <span class="badge bg-success rounded-pill align-self-center mt-1">ONLINE</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="card p-3 border-0 bg-success bg-opacity-10 text-success text-center">
+                                        <i class="fa-solid fa-server fa-2x mb-2"></i>
+                                        <h6 class="mb-1 font-weight-bold">Servidor de NPE</h6>
+                                        <span class="badge bg-success rounded-pill align-self-center mt-1">ONLINE</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="card p-3 border-0 bg-success bg-opacity-10 text-success text-center">
+                                        <i class="fa-solid fa-shield-halved fa-2x mb-2"></i>
+                                        <h6 class="mb-1 font-weight-bold">Firma Digital (FIEL)</h6>
+                                        <span class="badge bg-success rounded-pill align-self-center mt-1">ONLINE</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="content-card border border-light-gray bg-light bg-opacity-50 p-3">
+                                <h6 class="font-weight-bold mb-3"><i class="fa-solid fa-clock-rotate-left me-1"></i> Logs del Sistema de Transacciones (Hoy)</h6>
+                                <div style="font-family: monospace; font-size: 0.8rem; height: 180px; overflow-y: auto; background-color: var(--color-graphite); color: #00FF00; padding: 15px; border-radius: var(--border-radius-sm);">
+                                    <div>[15:14:02] INFO: Conexión establecida con la pasarela de pagos.</div>
+                                    <div>[15:10:15] INFO: Notificaciones Personales Electrónicas sincronizadas con la Secretaría General.</div>
+                                    <div>[14:48:30] INFO: Citas agendadas actualizadas (2 citas confirmadas hoy).</div>
+                                    <div>[14:02:11] INFO: Firma digital validada para Abogado Reg. 10934.</div>
+                                    <div>[12:15:00] INFO: Copia de seguridad diaria realizada con éxito en el servidor de respaldo.</div>
+                                    <div>[08:00:00] INFO: Inicio de servicios del Módulo del Tribunal Electrónico - Distrito Victoria.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </main>
             </div>
         </div>
     </div>
 
-    <!-- Controles de Música -->
-    <div class="music-controls">
-        <div class="music-btn music-player" id="play-btn" title="Reproducir / Pausar">
-            <!-- Ícono de Play -->
-            <svg id="icon-play" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path d="M8 5v14l11-7z"/>
-            </svg>
-            <!-- Ícono de Pause -->
-            <svg id="icon-pause" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="display: none;">
-                <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
-            </svg>
+    <!-- ==========================================================================
+         Footer / Pie de Página (Común para todas las vistas)
+         ========================================================================== -->
+    <footer class="footer-custom">
+        <div class="container">
+            <div class="row">
+                <!-- Columna 1: Logotipo e Identidad -->
+                <div class="col-lg-3 col-md-6 mb-4 mb-lg-0 text-center text-md-start">
+                    <img src="logos/PJET--NEGRO.png" alt="Escudo del Poder Judicial" class="footer-logo" style="filter: brightness(0) invert(1);">
+                    <p class="small text-white-50 mt-2">
+                        Poder Judicial del Estado de Tamaulipas.<br>
+                        Garantizando la impartición de justicia transparente, moderna y humana.
+                    </p>
+                    <div class="social-links justify-content-center justify-content-md-start">
+                        <a href="https://facebook.com" class="social-icon" target="_blank" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://twitter.com" class="social-icon" target="_blank" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="https://linkedin.com" class="social-icon" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="https://youtube.com" class="social-icon" target="_blank" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                
+                <!-- Columna 2: Contacto Oficial -->
+                <div class="col-lg-3 col-md-6 mb-4 mb-lg-0 px-md-4">
+                    <h5>Contacto Oficial</h5>
+                    <div class="footer-contact-item">
+                        <i class="fa-solid fa-phone"></i>
+                        <span>813 539-2335<br><small class="text-white-50">Línea de Atención</small></span>
+                    </div>
+                    <div class="footer-contact-item">
+                        <i class="fa-solid fa-phone"></i>
+                        <span>813-557-1133<br><small class="text-white-50">Soporte Técnico</small></span>
+                    </div>
+                </div>
+
+                <!-- Columna 3: Ubicación y Contacto -->
+                <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+                    <h5>Ubicación</h5>
+                    <div class="footer-contact-item">
+                        <i class="fa-solid fa-location-dot"></i>
+                        <span>Palacio de Justicia, Plaza Constitución, Ciudad Victoria, Tamaulipas, C.P. 87000.</span>
+                    </div>
+                    <div class="footer-contact-item">
+                        <i class="fa-solid fa-envelope"></i>
+                        <a href="mailto:info@tamaulip.com">info@tamaulip.com</a>
+                    </div>
+                </div>
+
+                <!-- Columna 4: Enlaces Importantes -->
+                <div class="col-lg-3 col-md-6">
+                    <h5>Enlaces de Interés</h5>
+                    <ul>
+                        <li><a href="http://www.tamaulipas.com" target="_blank"><i class="fas fa-chevron-right me-1 small"></i> Gobierno de Tamaulipas</a></li>
+                        <li><a href="#inicio"><i class="fas fa-chevron-right me-1 small"></i> Portal Judicial</a></li>
+                        <li><a href="#tramites"><i class="fas fa-chevron-right me-1 small"></i> Trámites en Línea</a></li>
+                        <li><a href="https://pjet.gob.mx/transparencia" target="_blank"><i class="fas fa-chevron-right me-1 small"></i> Unidad de Transparencia</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Derechos Reservados -->
+            <div class="footer-bottom">
+                <p class="mb-0">&copy; 2026 Poder Judicial del Estado de Tamaulipas. Todos los derechos reservados. Diseñado conforme al Manual de Identidad Corporativa 2025.</p>
+            </div>
         </div>
-        <div class="music-btn music-next" id="next-btn" title="Siguiente Canción">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/>
-            </svg>
-        </div>
-    </div>
+    </footer>
 
-    <!-- PEGA AQUÍ EL ENLACE DE TU CANCIÓN -->
-    <audio id="bg-audio" loop autoplay>
-        <source src="musica/Brillas.mp3" type="audio/mpeg">
-    </audio>
-
-    <script>
-        // Lógica de los Poemas Aleatorios
-        const poems = [
-            "Vanessa, eres mi lugar favorito, mi mayor alegría y la historia más hermosa que jamás imaginé escribir. Cada día contigo es un regalo.",
-            "Si tuviera que volver a elegir, te elegiría a ti en cada una de mis vidas, mi hermosa Vanessa. Eres mi coincidencia más bella.",
-            "Vanessa, no sé a dónde nos lleve la vida, pero espero que sea tomados de la mano. Eres todo lo que siempre soñé.",
-            "Tus ojos son mi paisaje favorito y tu sonrisa el mejor de mis refugios. Te amo más de lo que las palabras pueden expresar, Vanessa.",
-            "Contigo cada momento es poesía, Vanessa. Cada silencio es música y cada abrazo es mi hogar perfecto.",
-            "Quédate conmigo siempre, Vanessa, porque contigo la vida es mucho más bonita. Eres el amor de mis días y mis noches.",
-            "Me enamoré de ti sabiendo que nuestro amor iba a ser una aventura. Gracias por ser la luz que ilumina mi camino, mi amada Vanessa.",
-            "Elegirte a ti fue la mejor decisión que he tomado. Vanessa, eres y siempre serás mi persona favorita.",
-            "Vanessa, eres el sueño que nunca supe que tenía, y ahora no me imagino despertar sin ti a mi lado.",
-            "Te quiero no por quién eres, sino por quién soy cuando estoy contigo, mi dulce Vanessa.",
-            "Si el universo es infinito, mi amor por ti, Vanessa, es el universo entero concentrado en un latido.",
-            "La vida tiene muchos colores, pero desde que te conocí, Vanessa, todos se ven más brillantes y hermosos.",
-            "No importa cuántos obstáculos haya, siempre encontraré el camino de vuelta a tus brazos, mi preciosa Vanessa.",
-            "Vanessa, tú eres la razón por la que mi corazón sonríe, incluso en los días más grises.",
-            "Cada mensaje tuyo es como una caricia al alma. Te amo profundamente, Vanessa.",
-            "Amo cada detalle de ti, Vanessa. Eres la obra de arte más perfecta que la vida me regaló.",
-            "Vanessa, mi amor por ti crece con cada latido de mi corazón. Eres mi presente y mi futuro.",
-            "No hay lugar en el mundo donde prefiera estar que a tu lado, mi hermosa Vanessa.",
-            "Vanessa, me haces creer en la magia cada vez que me miras y me sonríes.",
-            "Eres el tesoro más grande que la vida me ha dado, mi amada Vanessa. Te amo con toda mi alma."
-        ];
-        
-        const poemText = document.getElementById('poem-text');
-        
-        function changePoem() {
-            poemText.classList.add('fade-out');
-            setTimeout(() => {
-                let randomIndex = Math.floor(Math.random() * poems.length);
-                // Evitar que se repita el mismo poema consecutivamente
-                while(poems[randomIndex] === poemText.textContent) {
-                    randomIndex = Math.floor(Math.random() * poems.length);
-                }
-                poemText.textContent = poems[randomIndex];
-                poemText.classList.remove('fade-out');
-            }, 1000); // Esperar el fade-out de CSS (1s)
-        }
-
-        // Cambiar el poema cada 8 segundos
-        setInterval(changePoem, 8000);
-
-        // Lógica de la Galería Animada (Collage aleatorio)
-        const allUserImages = [
-            "imagenes/117170376_1376496469406823_8072240687340670023_n.jpg",
-            "imagenes/120700089_1430208677368935_7905494940818386581_n.jpg",
-            "imagenes/126906285_1480954692294333_244055449148517610_n.jpg",
-            "imagenes/130589899_1492156547840814_2912686362480927703_n.jpg",
-            "imagenes/140759868_1525037817886020_4260831697068993057_n.jpg",
-            "imagenes/189089895_1617663638623437_4870966453245684567_n.jpg",
-            "imagenes/20250605_102630.jpg",
-            "imagenes/471622992_2620396725016785_6069001143448839936_n.jpg",
-            "imagenes/480781914_2686390105084113_7345203911638678231_n.jpg",
-            "imagenes/482325948_2680660035657120_1034243175173854033_n.jpg",
-            "imagenes/484869168_2685618471827943_3037574466680970296_n.jpg",
-            "imagenes/484972720_2690599021329888_7751564619989323435_n.jpg",
-            "imagenes/485339952_2691366571253133_2813699833319719637_n.jpg",
-            "imagenes/486085626_2694613364261787_8666894684806044761_n.jpg",
-            "imagenes/486748971_2694613557595101_179828777454502785_n.jpg",
-            "imagenes/488207328_2702861240103666_635878118305927599_n.jpg",
-            "imagenes/488803542_2708291416227315_1023688202938833341_n.jpg",
-            "imagenes/502944001_2766299330426523_3940385920105860682_n.jpg",
-            "imagenes/503351046_2766299250426531_5015238685965556871_n.jpg",
-            "imagenes/58379484_971185066604634_1085653546428268544_n.jpg",
-            "imagenes/597516084_2962062004183587_1090323166197507196_n.jpg",
-            "imagenes/60968175_991409124582228_5851796497309368320_n.jpg",
-            "imagenes/78999111_1148129242243548_522375367311228928_n.jpg",
-            "imagenes/83182494_1201869800202825_1515477629845635072_n.jpg",
-            "imagenes/87060654_1224466317943173_2584001493782757376_n.jpg",
-            "imagenes/87265816_1222772331445905_2334623305891315712_n.jpg",
-            "imagenes/87813961_1236627040060434_6782986372480237568_n.jpg",
-            "imagenes/92136593_1261644377558700_7978127667599769600_n.jpg",
-            "imagenes/92828122_1265102657212872_5417538710562406400_n.jpg",
-            "imagenes/94037088_1276064012783403_6829891332362731520_n.jpg",
-            "imagenes/EA8C7C51-B25C-4A2F-896B-BE4035BDBC9F.jpg",
-            "imagenes/IMG-20250728-WA0044(1)(1).jpg",
-            "imagenes/IMG-20250808-WA0036(1).jpg",
-            "imagenes/IMG_0639.jpg",
-            "imagenes/IMG_0748.jpg",
-            "imagenes/IMG_1225.jpg",
-            "imagenes/IMG_1341.jpg",
-            "imagenes/IMG_1512.jpg",
-            "imagenes/IMG_1554.jpg",
-            "imagenes/IMG_20200608_181414207_HDR.jpg",
-            "imagenes/IMG_20241014_074132.jpg",
-            "imagenes/IMG_2337.jpg",
-            "imagenes/IMG_2349.jpg",
-            "imagenes/IMG_2367.jpg",
-            "imagenes/IMG_2399.jpg",
-            "imagenes/IMG_2507.jpg",
-            "imagenes/IMG_2520.jpg",
-            "imagenes/IMG_2713.jpg",
-            "imagenes/IMG_2792.jpg",
-            "imagenes/IMG_2853.jpg",
-            "imagenes/WhatsApp Image 2026-05-12 at 7.14.54 PM.jpeg",
-            "imagenes/WhatsApp Image 2026-05-12 at 7.18.16 PM.jpeg",
-            "imagenes/WhatsApp Image 2026-05-12 at 7.27.17 PM.jpeg",
-            "imagenes/WhatsApp Image 2026-05-12 at 7.39.14 PM.jpeg",
-            "imagenes/WhatsApp Image 2026-05-12 at 7.45.07 PM.jpeg",
-            "imagenes/WhatsApp Image 2026-05-12 at 7.48.59 PM.jpeg",
-            "imagenes/fa799d5c-fd65-409e-878f-6e3fae84b897.jpg"
-        ];
-        
-        const collageItems = document.querySelectorAll('.collage-item');
-
-        function changeRandomImage() {
-            // Escoger un cuadro del collage aleatorio
-            const randomItem = collageItems[Math.floor(Math.random() * collageItems.length)];
-            const currentImg = randomItem.querySelector('img.active');
-            const nextImg = randomItem.querySelector('img.next-image');
-            
-            // Obtener todas las imágenes actualmente en pantalla para evitar repetirlas
-            // Usamos getAttribute('src') en lugar de .src para obtener la ruta relativa exactamente igual al array
-            const visibleImages = Array.from(document.querySelectorAll('.collage-item img.active')).map(img => img.getAttribute('src'));
-            
-            // Filtrar las imágenes para elegir solo las que no se están mostrando ahora mismo
-            const availableImages = allUserImages.filter(src => !visibleImages.includes(src));
-            
-            // Escoger una imagen aleatoria de las disponibles
-            let newSrc;
-            if (availableImages.length > 0) {
-                newSrc = availableImages[Math.floor(Math.random() * availableImages.length)];
-            } else {
-                newSrc = allUserImages[Math.floor(Math.random() * allUserImages.length)];
-            }
-            
-            nextImg.src = newSrc;
-            
-            // Intercambiar las clases suavemente
-            nextImg.classList.add('active');
-            nextImg.classList.remove('next-image');
-            
-            currentImg.classList.remove('active');
-            currentImg.classList.add('next-image');
-        }
-
-        // Ejecutar el cambio de imagen con un intervalo aleatorio
-        function scheduleNextImageChange() {
-            // Tiempo aleatorio más rápido: entre 1500 ms (1.5s) y 4500 ms (4.5s)
-            const randomDelay = Math.floor(Math.random() * (4500 - 1500 + 1)) + 1500;
-            setTimeout(() => {
-                changeRandomImage();
-                scheduleNextImageChange();
-            }, randomDelay);
-        }
-        
-        // Iniciar el ciclo de cambios aleatorios de imágenes
-        scheduleNextImageChange();
-
-        // Lógica del Reproductor de Música
-        const playlist = [
-            "musica/Brillas.mp3",
-            "musica/Beso.mp3",
-            "musica/Chachachá.mp3",
-            "musica/Labios Rotos (En Vivo Desde México  2010).mp3",
-            "musica/MAGIC! - Rude (Official Video).mp3",
-            "musica/Mi Buen Amor.mp3",
-            "musica/San Lucas.mp3"
-        ];
-        // Empezar con una canción aleatoria
-        let currentSongIndex = Math.floor(Math.random() * playlist.length);
-
-        const audio = document.getElementById('bg-audio');
-        const playBtn = document.getElementById('play-btn');
-        const nextBtn = document.getElementById('next-btn');
-        const iconPlay = document.getElementById('icon-play');
-        const iconPause = document.getElementById('icon-pause');
-        let isPlaying = false;
-
-        function setPlayState() {
-            isPlaying = true;
-            iconPlay.style.display = 'none';
-            iconPause.style.display = 'block';
-            playBtn.classList.add('playing');
-        }
-
-        function playCurrentSong() {
-            audio.src = playlist[currentSongIndex];
-            audio.play().then(() => {
-                setPlayState();
-            }).catch(error => {
-                console.log('Esperando interacción para reproducir...');
-            });
-        }
-        
-        function playNextRandomSong() {
-            let newIndex = Math.floor(Math.random() * playlist.length);
-            // Evitar que se repita la misma canción
-            while (newIndex === currentSongIndex && playlist.length > 1) {
-                newIndex = Math.floor(Math.random() * playlist.length);
-            }
-            currentSongIndex = newIndex;
-            playCurrentSong();
-        }
-
-        // Siguiente canción automáticamente al terminar
-        audio.addEventListener('ended', () => {
-            playNextRandomSong();
-        });
-
-        // Botón Siguiente
-        nextBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            playNextRandomSong();
-        });
-
-        // Intentar reproducir automáticamente
-        window.addEventListener('load', () => {
-            playCurrentSong();
-            
-            // Iniciar audio al primer clic si el autoplay fue bloqueado
-            document.body.addEventListener('click', function initAudio() {
-                if (!isPlaying) {
-                    audio.play().then(() => setPlayState());
-                }
-                document.body.removeEventListener('click', initAudio);
-            }, { once: true });
-        });
-
-        playBtn.addEventListener('click', (e) => {
-            e.stopPropagation(); // Evitar que el click se propague al body
-            if (isPlaying) {
-                audio.pause();
-                iconPause.style.display = 'none';
-                iconPlay.style.display = 'block';
-                playBtn.classList.remove('playing');
-                isPlaying = false;
-            } else {
-                audio.play().then(() => {
-                    setPlayState();
-                }).catch(error => {
-                    console.log('Error al reproducir audio.');
-                });
-            }
-        });
-    </script>
+    <!-- Bootstrap 5 Bundle JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    
+    <!-- Lógica de la SPA -->
+    <script src="app.js"></script>
 </body>
 </html>
